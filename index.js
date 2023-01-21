@@ -22,23 +22,25 @@ const client = new Client({
 
   client.connect();
 
-  app.use('/static', express.static(path.join(__dirname, 'public')))
+  app.use(express.static('public'));
 
   app.post('/create', async (req, res) => {
-    const { name, email } = req.body
-    client.query(`INSERT INTO students (name, email) VALUES('${name}','${email}}')`)
+    const {TIEMPO, TEMPERATURA, HUMEDAD, LUZ} = req.body
+    client.query(`INSERT INTO mds (TIEMPO, TEMPERATURA, HUMEDAD, LUZ) VALUES('${TIEMPO}', ${TEMPERATURA} , ${HUMEDAD} , ${LUZ})`)
     res.send('NUEVOS DATOS CREADOS')
     //res.send(request.bodyParser);
   });
 
   app.get('/read', async (req, res) => {
     //const { id } = req.params
-    const { rows } = await client.query('SELECT * FROM students');
+    const { rows } = await client.query('SELECT * FROM mds');
     res.send(rows);
   });
   
   app.put('/update', async (req, res) => {
-
+    const { name, id } = req.body
+    client.query(`UPDATE students SET name = '${name}' where id = '${id}'`)
+    res.send('DATOS ACTUALIZADOS')
   });
 
   app.delete('/delete', async (req, res) => {
