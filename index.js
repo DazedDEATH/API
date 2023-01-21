@@ -25,8 +25,8 @@ const client = new Client({
   app.use(express.static('public'));
 
   app.post('/create', async (req, res) => {
-    const {TIEMPO, TEMPERATURA, HUMEDAD, LUZ} = req.body
-    client.query(`INSERT INTO mds (TIEMPO, TEMPERATURA, HUMEDAD, LUZ) VALUES('${TIEMPO}', ${TEMPERATURA} , ${HUMEDAD} , ${LUZ})`)
+    const {TIEMPO, TEMPERATURA, HUMEDAD, LUZ, PUMP} = req.body
+    client.query(`INSERT INTO mds (TIEMPO, TEMPERATURA, HUMEDAD, LUZ, PUMP) VALUES('${TIEMPO}', ${TEMPERATURA} , ${HUMEDAD} , ${LUZ} , '${PUMP}')`)
     res.send('NUEVOS DATOS CREADOS')
     //res.send(request.bodyParser);
   });
