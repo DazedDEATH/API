@@ -33,19 +33,23 @@ const client = new Client({
 
   app.get('/read', async (req, res) => {
     //const { id } = req.params
-    const { rows } = await client.query('SELECT * FROM mds');
+    const { rows } = await client.query('SELECT * FROM mds s');
     res.send(rows);
   });
   
   app.put('/update', async (req, res) => {
-    const { name, id } = req.body
-    client.query(`UPDATE students SET name = '${name}' where id = '${id}'`)
+    const { TEMPERATURA, id } = req.body
+    
+    client.query(`UPDATE mds 
+    SET TEMPERATURA = ${TEMPERATURA} 
+    where id = ${id}`)
+
     res.send('DATOS ACTUALIZADOS')
   });
 
   app.delete('/delete', async (req, res) => {
     const { id } = req.body
-    client.query(`DELETE from students where id = '${id}'`)
+    client.query(`DELETE from mds where id = '${id}'`)
     res.send('DATOS ELIMINADOS')
   });
 
