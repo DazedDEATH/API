@@ -46,10 +46,20 @@ const client = new Client({
     res.send(rows);
   });
 
-  app.get('/last_lumi', async(req, res) => {
-    const {rows} = await client.query('SELECT id, TEMPERATURA FROM MDS ORDER BY id DESC LIMIT 1')
+  app.get('/lumi', async(req, res) => {
+    const {rows} = await client.query('SELECT LUZ FROM MDS ORDER BY id DESC LIMIT 1')
     res.send(rows);
   });
+  app.get('/temp', async(req, res) => {
+    const {rows} = await client.query('SELECT TEMPERATURA FROM MDS ORDER BY id DESC LIMIT 1')
+    res.send(rows);
+  });
+  app.get('/hume', async(req, res) => {
+    const {rows} = await client.query('SELECT HUMEDAD FROM MDS ORDER BY id DESC LIMIT 1')
+    res.send(rows);
+  });
+
+
   
   app.put('/update', async (req, res) => {
     const { TEMPERATURA, id } = req.body

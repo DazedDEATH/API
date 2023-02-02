@@ -8,7 +8,7 @@
     <title>Metodologías de Desarrollo de Software - New pensum transition</title>
     <link rel="" href="">
   </head>
-  <body> 
+  <body onload="getData()"> 
     <style>
         h1 {text-align: center;}
         h2 {text-align: center;}
@@ -20,6 +20,37 @@
     <h2>New pensum transition</h2>
     <h3>Daniel Felipe Durango Santana - Santiago Giraldo Jimenez - Juan Sebastián Méndez Becerra - Juan David Rivera Marín</h3>
 
+    <script>
+       function getLumi() {
+        fetch('http://localhost:3000/lumi')
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("data_lumi").innerHTML = data[0].luz;
+          });
+      }
+
+      function getTemp() {
+        fetch('http://localhost:3000/temp')
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("data_temp").innerHTML = data[0].temperatura;
+          });
+      }
+
+      function getHume() {
+        fetch('http://localhost:3000/hume')
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById("data_hume").innerHTML = data[0].humedad;
+          });
+      }
+
+      setInterval(getLumi, 2000);
+      setInterval(getTemp, 2000);
+      setInterval(getHume, 2000);
+    </script>
+
+
     <div class="datos">
 
       </style>
@@ -27,21 +58,21 @@
         <svg width="400" height="600">
           <circle cx="200" cy="200" r="160" stroke="black" stroke-width="3" fill="#ffd600" />
           <text x="200" y="20" text-anchor="middle">Luminosidad: </text>
-          <text x="200" y="240"  text-anchor="middle" style="font-size: 50px;">50%</text>
+          <text id="data_lumi" x="200" y="240"  text-anchor="middle" style="font-size: 50px;"></text>
           <image xlink:href="Luminosidad.png" x="150" y="80" width="100" height="100" />
         </svg>
 
         <svg width="400" height="600">
           <circle cx="200" cy="200" r="160" stroke="black" stroke-width="3" fill="#FC502B" />
           <text x="200" y="20" text-anchor="middle">Temperatura</text>
-          <text x="200" y="240"  text-anchor="middle" style="font-size: 50px;">70%</text>
+          <text id="data_temp" x="200" y="240"  text-anchor="middle" style="font-size: 50px;"></text>
           <image xlink:href="temperatura.png" x="150" y="80" width="100" height="100" />
         </svg>
 
         <svg width="400" height="600">
           <circle cx="200" cy="200" r="160" stroke="black" stroke-width="3" fill="#2B81FC" />
-          <text x="200" y="20" text-anchor="middle">Humedad en el suelo</text>
-          <text x="200" y="240"  text-anchor="middle" style="font-size: 50px;">20%</text>
+          <text x="200" y="20" text-anchor="middle">Humedad en el aire</text>
+          <text id="data_hume" x="200" y="240"  text-anchor="middle" style="font-size: 50px;"></text>
           <image xlink:href="Humedadsuelo.png" x="150" y="80" width="100" height="100" />
       </svg>
        
@@ -70,9 +101,10 @@
     
     <script>
       var currentData = [];
+      
   setInterval(function() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:3000/read", true);
+    xhr.open("GET", "http://localhost:3000/read_last_20", true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         var data = JSON.parse(xhr.responseText);
@@ -121,6 +153,7 @@
         xhr.send();
       }, 5000);
     </script>  
+   
    
  </body>
 </html>
