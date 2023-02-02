@@ -24,6 +24,10 @@ const client = new Client({
 
   app.use(express.static('public'));
 
+  app.get('/', (req, res) => {
+    res.sendFile('index.html', {root: path.join(__dirname, 'public')});
+  })
+
   app.post('/create', async (req, res) => {
     const {TIEMPO, TEMPERATURA, HUMEDAD, LUZ, PUMP} = req.body
     client.query(`INSERT INTO mds (TIEMPO, TEMPERATURA, HUMEDAD, LUZ, PUMP) VALUES('${TIEMPO}', ${TEMPERATURA} , ${HUMEDAD} , ${LUZ} , '${PUMP}')`)
@@ -56,3 +60,5 @@ const client = new Client({
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
   })
+
+  module.exports = app;
