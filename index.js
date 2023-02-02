@@ -40,6 +40,16 @@ const client = new Client({
     const { rows } = await client.query('SELECT * FROM mds s');
     res.send(rows);
   });
+
+  app.get('/read_last_20', async (req, res) => {
+    const { rows } = await client.query('SELECT * FROM mds ORDER BY id DESC LIMIT 20;');
+    res.send(rows);
+  });
+
+  app.get('/last_lumi', async(req, res) => {
+    const {rows} = await client.query('SELECT id, TEMPERATURA FROM MDS ORDER BY id DESC LIMIT 1')
+    res.send(rows);
+  });
   
   app.put('/update', async (req, res) => {
     const { TEMPERATURA, id } = req.body
