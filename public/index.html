@@ -8,7 +8,7 @@
     <title>Metodologías de Desarrollo de Software - New pensum transition</title>
     <link rel="" href="">
   </head>
-  <body onload="getData()"> 
+  <body> 
     <style>
         h1 {text-align: center;}
         h2 {text-align: center;}
@@ -22,7 +22,7 @@
 
     <script>
        function getLumi() {
-        fetch('http://localhost:3000/lumi')
+        fetch('https://api-dazeddeath.vercel.app/lumi')
           .then(response => response.json())
           .then(data => {
             document.getElementById("data_lumi").innerHTML = data[0].luz;
@@ -30,7 +30,7 @@
       }
 
       function getTemp() {
-        fetch('http://localhost:3000/temp')
+        fetch('https://api-dazeddeath.vercel.app/temp')
           .then(response => response.json())
           .then(data => {
             document.getElementById("data_temp").innerHTML = data[0].temperatura;
@@ -38,16 +38,15 @@
       }
 
       function getHume() {
-        fetch('http://localhost:3000/hume')
+        fetch('https://api-dazeddeath.vercel.app/hume')
           .then(response => response.json())
           .then(data => {
             document.getElementById("data_hume").innerHTML = data[0].humedad;
           });
       }
-
-      setInterval(getLumi, 2000);
-      setInterval(getTemp, 2000);
-      setInterval(getHume, 2000);
+      setInterval(getLumi, 5000);
+      setInterval(getTemp, 5000);
+      setInterval(getHume, 5000);
     </script>
 
 
@@ -104,7 +103,7 @@
       
   setInterval(function() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:3000/read_last_20", true);
+    xhr.open("GET", "https://api-dazeddeath.vercel.app/read_last_20", true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         var data = JSON.parse(xhr.responseText);
@@ -151,9 +150,7 @@
           }
         };
         xhr.send();
-      }, 5000);
+      }, 3000);
     </script>  
-   
-   
  </body>
 </html>
