@@ -42,7 +42,7 @@ const client = new Client({
   });
 
   app.get('/read_last_20', async (req, res) => {
-    const { rows } = await client.query('SELECT * FROM mds ORDER BY id DESC LIMIT 20;');
+    const { rows } = await client.query('SELECT * FROM mds ORDER BY id DESC LIMIT 1;');
     res.send(rows);
   });
 
