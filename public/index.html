@@ -22,7 +22,7 @@
        <!--
     <script>
        function getLumi() {
-        fetch('https://api-dazeddeath.vercel.app/lumi')
+        fetch('/lumi')
           .then(response => response.json())
           .then(data => {
             document.getElementById("data_lumi").innerHTML = data[0].luz;
@@ -30,7 +30,7 @@
       }
 
       function getTemp() {
-        fetch('https://api-dazeddeath.vercel.app/temp')
+        fetch('/temp')
           .then(response => response.json())
           .then(data => {
             document.getElementById("data_temp").innerHTML = data[0].temperatura;
@@ -38,7 +38,7 @@
       }
 
       function getHume() {
-        fetch('https://api-dazeddeath.vercel.app/hume')
+        fetch('/hume')
           .then(response => response.json())
           .then(data => {
             document.getElementById("data_hume").innerHTML = data[0].humedad;
@@ -103,7 +103,7 @@
       
   setInterval(function() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://api-dazeddeath.vercel.app/read_last_20", true);
+    xhr.open("GET", "/read_last_20", true);
     xhr.onreadystatechange = function () {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         var data = JSON.parse(xhr.responseText);
