@@ -3,13 +3,6 @@ const { request } = require('express');
 const express = require('express')
 const bodyParser = require("body-parser");
 const path = require('path');
-const router = express.Router();
-const app = express()
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-const port = process.env.PORT || 3000;
 
 const { Client } = require('pg');
 
@@ -20,65 +13,72 @@ const client = new Client({
     }
   });
 
-  client.connect();
+client.connect();
 
-  app.use(express.static('public'));
+const app = express()
 
-  app.get('/', (req, res) => {
-    res.sendFile('index.html', {root: path.join(__dirname, 'public')});
-  })
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-  app.post('/create', async (req, res) => {
-    const {TIEMPO, TEMPERATURA, HUMEDAD, LUZ, PUMP} = req.body
-    client.query(`INSERT INTO mds (TIEMPO, TEMPERATURA, HUMEDAD, LUZ, PUMP) VALUES('${TIEMPO}', ${TEMPERATURA} , ${HUMEDAD} , ${LUZ} , '${PUMP}')`)
-    res.send('NUEVOS DATOS CREADOS')
-    //res.send(request.bodyParser);
-  });
+const port = process.env.PORT || 3000;
 
-  app.get('/read', async (req, res) => {
-    //const { id } = req.params
-    const { rows } = await client.query('SELECT * FROM mds s');
-    res.send(rows);
-  });
+app.use(express.static('public'));
 
-  app.get('/read_last_20', async (req, res) => {
-    const { rows } = await client.query('SELECT * FROM mds ORDER BY id DESC LIMIT 1;');
-    res.send(rows);
-  });
+app.get('/', (req, res) => {
+  res.sendFile('index.html', {root: path.join(__dirname, 'public')});
+})
 
-  app.get('/lumi', async(req, res) => {
-    const {rows} = await client.query('SELECT LUZ FROM MDS ORDER BY id DESC LIMIT 1')
-    res.send(rows);
-  });
-  app.get('/temp', async(req, res) => {
-    const {rows} = await client.query('SELECT TEMPERATURA FROM MDS ORDER BY id DESC LIMIT 1')
-    res.send(rows);
-  });
-  app.get('/hume', async(req, res) => {
-    const {rows} = await client.query('SELECT HUMEDAD FROM MDS ORDER BY id DESC LIMIT 1')
-    res.send(rows);
-  });
+app.post('/create', async (req, res) => {
+  const {TIEMPO, TEMPERATURA, HUMEDAD, LUZ, PUMP} = req.body
+  client.query(`INSERT INTO mds (TIEMPO, TEMPERATURA, HUMEDAD, LUZ, PUMP) VALUES('${TIEMPO}', ${TEMPERATURA} , ${HUMEDAD} , ${LUZ} , '${PUMP}')`)
+  res.send('NUEVOS DATOS CREADOS')
+  //res.send(request.bodyParser);
+});
+
+app.get('/read', async (req, res) => {
+  //const { id } = req.params
+  const { rows } = await client.query('SELECT * FROM mds s');
+  res.send(rows);
+});
+
+app.get('/read_last_20', async (req, res) => {
+  const { rows } = await client.query('SELECT * FROM mds ORDER BY id DESC LIMIT 1;');
+  res.send(rows);
+});
+
+app.get('/lumi', async(req, res) => {
+  const {rows} = await client.query('SELECT LUZ FROM MDS ORDER BY id DESC LIMIT 1')
+  res.send(rows);
+});
+app.get('/temp', async(req, res) => {
+  const {rows} = await client.query('SELECT TEMPERATURA FROM MDS ORDER BY id DESC LIMIT 1')
+  res.send(rows);
+});
+app.get('/hume', async(req, res) => {
+  const {rows} = await client.query('SELECT HUMEDAD FROM MDS ORDER BY id DESC LIMIT 1')
+  res.send(rows);
+});
 
 
+
+app.put('/update', async (req, res) => {
+  const { TEMPERATURA, id } = req.body
   
-  app.put('/update', async (req, res) => {
-    const { TEMPERATURA, id } = req.body
-    
-    client.query(`UPDATE mds 
-    SET TEMPERATURA = ${TEMPERATURA} 
-    where id = ${id}`)
+  client.query(`UPDATE mds 
+  SET TEMPERATURA = ${TEMPERATURA} 
+  where id = ${id}`)
 
-    res.send('DATOS ACTUALIZADOS')
-  });
+  res.send('DATOS ACTUALIZADOS')
+});
 
-  app.delete('/delete', async (req, res) => {
-    const { id } = req.body
-    client.query(`DELETE from mds where id = '${id}'`)
-    res.send('DATOS ELIMINADOS')
-  });
+app.delete('/delete', async (req, res) => {
+  const { id } = req.body
+  client.query(`DELETE from mds where id = '${id}'`)
+  res.send('DATOS ELIMINADOS')
+});
 
-  app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-  })
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
 
-  module.exports = app;
+module.exports = app;
