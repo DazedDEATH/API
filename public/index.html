@@ -96,60 +96,64 @@
       <tbody>
       </tbody>
     </table>
-    
+
     <script>
       var currentData = [];
       
-  setInterval(function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/read_last_20", true);
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        var data = JSON.parse(xhr.responseText);
-        var table = document.getElementById("data-table");
-        var tbody = table.getElementsByTagName("tbody")[0];
-        
-        data.forEach(function (newRow) {
-          var found = false;
-          currentData.forEach(function (existingRow) {
-            if (existingRow.id === newRow.id) {
-              found = true;
+      setInterval(function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/read_last_20", true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            var table = document.getElementById("data-table");
+            var tbody = table.getElementsByTagName("tbody")[0];
+            
+            data.sort(function (a, b) { return b.id - a.id; }); // Ordena la data nueva del mayor al menor ID
+            currentData.sort(function (a, b) { return b.id - a.id; }); // Ordena los datos existentes en la tabla del mayor al menor ID
+            
+            data.forEach(function (newRow) {
+              var found = false;
+              currentData.forEach(function (existingRow) {
+                if (existingRow.id === newRow.id) {
+                  found = true;
+                }
+              });
+              if (!found) {
+                var tr = document.createElement("tr");
+                var idTd = document.createElement("td");
+                idTd.textContent = newRow.id;
+                idTd.style.textAlign = "center";
+                tr.appendChild(idTd);
+                var tiempoTd = document.createElement("td");
+                tiempoTd.textContent = newRow.tiempo;
+                tiempoTd.style.textAlign = "center";
+                tr.appendChild(tiempoTd);
+                var temperaturaTd = document.createElement("td");
+                temperaturaTd.textContent = newRow.temperatura;
+                temperaturaTd.style.textAlign = "center";
+                tr.appendChild(temperaturaTd);
+                var humedadTd = document.createElement("td");
+                humedadTd.textContent = newRow.humedad;
+                humedadTd.style.textAlign = "center";
+                tr.appendChild(humedadTd);
+                var luzTd = document.createElement("td");
+                luzTd.textContent = newRow.luz;
+                luzTd.style.textAlign = "center";
+                tr.appendChild(luzTd);
+                var pumpTd = document.createElement("td");
+                pumpTd.textContent = newRow.pump;
+                pumpTdtextContent = newRow.pump;
+                pumpTd.style.textAlign = "center";
+                tr.appendChild(pumpTd);
+                tbody.insertBefore(tr, tbody.firstChild);
+                currentData.push(newRow);
             }
           });
-          if (!found) {
-            var tr = document.createElement("tr");
-            var idTd = document.createElement("td");
-            idTd.textContent = newRow.id;
-            idTd.style.textAlign = "center";
-            tr.appendChild(idTd);
-            var tiempoTd = document.createElement("td");
-            tiempoTd.textContent = newRow.tiempo;
-            tiempoTd.style.textAlign = "center";
-            tr.appendChild(tiempoTd);
-            var temperaturaTd = document.createElement("td");
-            temperaturaTd.textContent = newRow.temperatura;
-            temperaturaTd.style.textAlign = "center";
-            tr.appendChild(temperaturaTd);
-            var humedadTd = document.createElement("td");
-            humedadTd.textContent = newRow.humedad;
-            humedadTd.style.textAlign = "center";
-            tr.appendChild(humedadTd);
-            var luzTd = document.createElement("td");
-            luzTd.textContent = newRow.luz;
-            luzTd.style.textAlign = "center";
-            tr.appendChild(luzTd);
-            var pumpTd = document.createElement("td");
-            pumpTd.textContent = newRow.pump;
-            pumpTd.style.textAlign = "center";
-            tr.appendChild(pumpTd);
-            tbody.appendChild(tr);
-            currentData.push(newRow);
-              }
-            });
-          }
-        };
-        xhr.send();
-      }, 3000);
-    </script>  
+        }
+      };
+      xhr.send();
+    }, 5000);
+    </script>
  </body>
 </html>
